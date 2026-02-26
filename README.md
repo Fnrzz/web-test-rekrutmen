@@ -19,8 +19,8 @@ Pastikan sistem Anda sudah terinstal:
 
 1. **Clone Repositori**
 ```bash
-   git clone <url-repo-anda>
-   cd <nama-folder-repo>
+   git clone https://github.com/Fnrzz/web-test-rekrutmen.git
+   cd web-test-rekrutmen
 ```
 
 2. **Install Dependencies**
