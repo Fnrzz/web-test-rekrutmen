@@ -25,7 +25,7 @@ class VideoRequestController extends Controller
             'expiry_hours' => ['required', 'integer', 'min:1'],
         ]);
 
-        $expiredAt = Carbon::now()->addHours($request->expiry_hours);
+        $expiredAt = Carbon::now()->addHours((int) $request->expiry_hours);
 
         $videoRequest->update([
             'status'     => 'approved',
