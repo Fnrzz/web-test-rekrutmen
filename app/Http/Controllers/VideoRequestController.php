@@ -11,12 +11,12 @@ class VideoRequestController extends Controller
 {
     public function index()
     {
-        $requests = VideoRequest::with(['user', 'video'])
+        $datas = VideoRequest::with(['user', 'video'])
             ->orderByRaw("FIELD(status, 'pending', 'approved', 'rejected')")
             ->latest()
             ->get();
 
-        return view('admin.video-requests.index', compact('requests'));
+        return view('admin.video-requests.index', compact('datas'));
     }
 
     public function approve(Request $request, VideoRequest $videoRequest)
@@ -25,7 +25,7 @@ class VideoRequestController extends Controller
             'expiry_hours' => ['required', 'integer', 'min:1'],
         ]);
 
-        $expiredAt = Carbon::now()->addHours((int) $request->expiry_hours);
+        $expiredAt = Carbon::now()->addHours($request->expiry_hours);
 
         $videoRequest->update([
             'status'     => 'approved',

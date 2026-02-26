@@ -22,7 +22,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    @forelse ($requests as $index => $req)
+                    @forelse ($datas as $index => $req)
                         <tr class="hover:bg-gray-50 transition">
                             <td class="px-5 py-3 text-gray-500">{{ $index + 1 }}</td>
                             <td class="px-5 py-3">
@@ -87,7 +87,7 @@
                                             action="{{ route('video-requests.reject', $req) }}">
                                             @csrf
                                             <button type="button"
-                                                onclick="confirmReject({{ $req->id }}, '{{ addslashes($req->user->name) }}')"
+                                                onclick="confirmReject({{ $req->id }}, '{{ $req->user->name }}')"
                                                 class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 transition cursor-pointer">
                                                 <i class="bi bi-x-lg"></i> Reject
                                             </button>
@@ -153,10 +153,6 @@
             document.getElementById('approve-modal').classList.add('hidden');
             document.body.style.overflow = '';
         }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeApproveModal();
-        });
 
         function confirmReject(requestId, userName) {
             Swal.fire({
