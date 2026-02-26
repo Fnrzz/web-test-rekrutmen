@@ -105,24 +105,6 @@
         </div>
     </div>
 
-    <style>
-        @keyframes modalIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95) translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        .animate-modal-in {
-            animation: modalIn 0.2s ease-out;
-        }
-    </style>
-
     <script>
         function openVideoModal(videoUrl, title) {
             const modal = document.getElementById('video-modal');
@@ -145,10 +127,6 @@
             modal.classList.add('hidden');
             document.body.style.overflow = '';
         }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeVideoModal();
-        });
 
         function confirmDelete(videoId, videoTitle) {
             Swal.fire({
