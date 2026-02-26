@@ -13,7 +13,7 @@
     @stack('styles')
 </head>
 
-<body class="font-['Inter'] bg-gray-50 text-gray-800">
+<body class="bg-gray-50 text-gray-800">
 
     @include('sweetalert2::index')
     <div id="sidebar-overlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>

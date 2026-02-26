@@ -14,7 +14,7 @@
     @stack('styles')
 </head>
 
-<body class="font-['Inter']">
+<body>
     <main class="bg-[#F6F8FD]">
         @yield('content')
     </main>
