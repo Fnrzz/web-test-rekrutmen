@@ -12,7 +12,6 @@ class VideoRequestController extends Controller
     public function index()
     {
         $datas = VideoRequest::with(['user', 'video'])
-            ->orderByRaw("FIELD(status, 'pending', 'approved', 'rejected')")
             ->latest()
             ->get();
 
