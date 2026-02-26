@@ -1,59 +1,162 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistem Perijinan Menonton Video (Laravel)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi berbasis web yang dibangun dengan Laravel untuk mengelola hak akses menonton video. Sistem ini memiliki dua level pengguna (Admin dan Customer) dengan fitur pembatasan waktu menonton (misalnya: akses hanya berlaku selama 2 jam setelah disetujui).
 
-## About Laravel
+## Fitur Utama
+- **Admin**: CRUD data customer, CRUD data video, dan menyetujui request menonton video dengan batas waktu tertentu.
+- **Customer**: Melihat katalog video, meminta akses menonton, dan menonton video selama masa tenggang waktu yang diberikan belum habis.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Prasyarat (Prerequisites)
+Pastikan sistem Anda sudah terinstal:
+- PHP >= 8.1
+- Composer
+- XAMPP / Laragon / Web Server lainnya
+- MySQL / MariaDB
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Langkah Instalasi
 
-## Learning Laravel
+1. **Clone Repositori**
+```bash
+   git clone <url-repo-anda>
+   cd <nama-folder-repo>
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+2. **Install Dependencies**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+   composer install
 
-## Laravel Sponsors
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-### Premium Partners
+3. **Pengaturan Environment**
+Duplikat file `.env.example` menjadi `.env`.
+```bash
+    cp .env.example .env
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```
 
-## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Buka file `.env` dan sesuaikan konfigurasi database Anda:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nama_database_anda
+DB_USERNAME=root
+DB_PASSWORD=
 
-## Code of Conduct
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
+4. **Generate Application Key**
+```bash
+php artisan key:generate
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+5. **Migrasi Database**
+Jalankan perintah ini untuk membuat struktur tabel (users, video_categories, videos, video_requests) di database:
+```bash
+php artisan migrate
+
+```
+
+
+
+---
+
+## Konfigurasi Storage Symlink (Penting!)
+
+
+```bash
+php artisan storage:link
+
+```
+
+*Catatan: Pastikan Anda menjalankan perintah ini setiap kali memindahkan aplikasi ke server/komputer baru.*
+
+---
+
+## Panduan Setting Upload Video Besar (php.ini)
+
+Secara bawaan (default), PHP membatasi ukuran upload file hanya sebesar 2MB - 8MB. Agar Admin bisa mengunggah video berukuran besar (misal hingga 500MB), Anda **wajib** mengubah konfigurasi pada file `php.ini`.
+
+### Langkah 1: Ubah Nilai Konfigurasi
+
+Cari nilai berikut di dalam file `php.ini` Anda dan ubah angkanya:
+
+```ini
+upload_max_filesize = 500M
+post_max_size = 512M
+memory_limit = 512M
+max_execution_time = 300
+
+```
+
+*(Catatan: Nilai `post_max_size` harus sama atau sedikit lebih besar dari `upload_max_filesize`).*
+
+### Langkah 2: Temukan Lokasi File `php.ini` & Restart Server
+
+Lokasi file `php.ini` dan cara me-restart server berbeda-beda tergantung Sistem Operasi yang Anda gunakan:
+
+#### 🍎 Pengguna Mac (macOS)
+
+* **Jika menggunakan XAMPP:**
+* Lokasi file: `/Applications/XAMPP/xamppfiles/etc/php.ini`
+* Cara Restart: Buka aplikasi `manager-osx` (XAMPP Control Panel), masuk ke tab **Manage Servers**, pilih **Apache Web Server**, lalu klik **Restart**.
+
+
+* **Jika menggunakan PHP bawaan / Homebrew (via `php artisan serve`):**
+* Ketik `php --ini` di terminal untuk melihat lokasi file `php.ini` yang aktif (biasanya di `/opt/homebrew/etc/php/8.x/php.ini`).
+* Cara Restart: Matikan server artisan (tekan `Ctrl + C` di terminal), lalu ketik ulang `php artisan serve`.
+
+
+
+#### 🪟 Pengguna Windows
+
+* **Jika menggunakan XAMPP:**
+* Lokasi file: `C:\xampp\php\php.ini`
+* Cara Restart: Buka XAMPP Control Panel, klik tombol **Stop** pada modul Apache, lalu klik **Start** kembali.
+
+
+* **Jika menggunakan Laragon:**
+* Klik Kanan pada Laragon -> PHP -> Quick Settings -> ubah `upload_max_filesize` dan `post_max_size`.
+* Cara Restart: Klik tombol **Stop** lalu **Start All** di Laragon.
+
+
+
+#### 🐧 Pengguna Linux (Ubuntu/Debian)
+
+* **Jika menggunakan Apache (LAMP Stack):**
+* Lokasi file biasanya ada di: `/etc/php/8.x/apache2/php.ini`
+* Cara Restart: `sudo systemctl restart apache2`
+
+
+* **Jika menggunakan Nginx:**
+* Lokasi file biasanya ada di: `/etc/php/8.x/fpm/php.ini`
+* Cara Restart: `sudo systemctl restart nginx` dan `sudo systemctl restart php8.x-fpm`
+
+
+* **Jika menggunakan XAMPP Linux:**
+* Lokasi file: `/opt/lampp/etc/php.ini`
+* Cara Restart: `sudo /opt/lampp/lampp restart`
+
+
+
+---
+
+## Menjalankan Aplikasi
+
+Setelah semua langkah di atas selesai, jalankan *development server* Laravel:
+
+```bash
+php artisan serve
+
+```
+
+Buka browser dan akses aplikasi melalui: **http://localhost:8000**
+
